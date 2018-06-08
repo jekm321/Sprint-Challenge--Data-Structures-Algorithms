@@ -7,12 +7,35 @@ class BinarySearchTree {
 
   depthFirstForEach(cb) {
     /* Your code here */
-    
+    cb(this.value);
+    if (this.left) {
+      this.left.depthFirstForEach(cb);
+    }
+    if (this.right) {
+      this.right.depthFirstForEach(cb);
+    }
   }
 
   breadthFirstForEach(cb) {
     /* Your code here */
+    const nodes = [];
+    nodes.push(this.value);
+    let left = this.left;
+    let right = this.right;
+    function populator(left, right) {
+      if (left && right) nodes.push(left.value, right.value);
+      else if (left) nodes.push(left.value);
+      else if (right) nodes.push(right.value);
 
+      if (left && right) {
+        populator(left.left, left.right);
+        populator(right.left, right.right);
+      } else if (left) populator(left.left, left.right);
+      else if (right) populator(right.left, right.right);
+      if (!left && !right) return;
+    }
+    populator(this.left, this.right);
+    nodes.forEach(num => cb(num));
   }
 
   insert(value) {
